@@ -4,7 +4,7 @@
   ...
 }:
 {
-  config = lib.mkIf (!pkgs.stdenv.isDarwin) {
+  config = {
     # Albert package
     home.packages = [ pkgs.albert ];
 

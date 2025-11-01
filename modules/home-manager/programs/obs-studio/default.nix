@@ -4,7 +4,7 @@
   ...
 }:
 {
-  config = lib.mkIf (!pkgs.stdenv.isDarwin) {
+  config = {
     # Install OBS Studio via home-manager module
     programs.obs-studio.enable = true;
 

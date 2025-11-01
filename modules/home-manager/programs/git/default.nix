@@ -12,7 +12,7 @@
     };
     signing = {
       key = userConfig.gitKey;
-      signByDefault = true;
+      signByDefault = false;
     };
   };
 

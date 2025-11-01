@@ -1,8 +1,8 @@
-# NixOS and nix-darwin Configurations for My Machines
+# NixOS  Configurations for My Machines
 
-This repository contains NixOS and nix-darwin configurations for my machines, managed through [Nix Flakes](https://nixos.wiki/wiki/Flakes).
+This repository contains NixOS configurations for my machines, managed through [Nix Flakes](https://nixos.wiki/wiki/Flakes).
 
-It is structured to easily accommodate multiple machines and user configurations, leveraging [nixpkgs](https://github.com/NixOS/nixpkgs), [home-manager](https://github.com/nix-community/home-manager), [nix-darwin](https://github.com/LnL7/nix-darwin), and various other community contributions for a seamless experience across NixOS and macOS.
+It is structured to easily accommodate multiple machines and user configurations, leveraging [nixpkgs](https://github.com/NixOS/nixpkgs), [home-manager](https://github.com/nix-community/home-manager), and various other community contributions for a seamless experience across NixOS.
 
 ## Showcase
 
@@ -14,19 +14,14 @@ It is structured to easily accommodate multiple machines and user configurations
 
 ![kde](./files/screenshots/kde.png)
 
-### macOS
-
-![macos](./files/screenshots/mac.png)
-
 ## Structure
 
-- `flake.nix`: The flake itself, defining inputs and outputs for NixOS, nix-darwin, and Home Manager configurations.
-- `hosts/`: NixOS and nix-darwin configurations for each machine (`energy`, `PL-OLX-KCGXHGK3PY`).
+- `flake.nix`: The flake itself, defining inputs and outputs for NixOS, and Home Manager configurations.
+- `hosts/`: NixOS configurations for each machine
 - `home/`: Home Manager configurations for each user on each machine.
 - `files/`: Miscellaneous configuration files, scripts, avatars, and screenshots.
 - `modules/`: Reusable platform-specific modules:
   - `nixos/`: NixOS-specific modules for system configuration.
-  - `darwin/`: macOS-specific (nix-darwin) modules.
   - `home-manager/`: User-space configuration modules for applications and services.
 - `overlays/`: Custom Nix overlays for package modifications or additions.
 - `flake.lock`: Lock file ensuring reproducible builds by pinning input versions.
@@ -36,7 +31,6 @@ It is structured to easily accommodate multiple machines and user configurations
 - **nixpkgs**: Points to the `nixos-unstable` channel for access to the latest packages.
 - **nixpkgs-stable**: Points to the `nixos-25.05` channel for stable packages.
 - **home-manager**: Manages user-specific configurations.
-- **darwin**: Enables nix-darwin for macOS system configuration.
 - **hardware**: Provides NixOS modules to optimize settings for different hardware.
 - **catppuccin**: Provides global Catppuccin theme integration.
 - **nix-flatpak**: Provides a declarative way to manage Flatpaks.
@@ -46,7 +40,7 @@ It is structured to easily accommodate multiple machines and user configurations
 
 ### Adding a New Machine with a New User
 
-To add a new machine with a new user to your NixOS or nix-darwin configuration, follow these steps:
+To add a new machine with a new user to your NixOS configuration, follow these steps:
 
 1. **Update `flake.nix`**:
 
@@ -75,16 +69,6 @@ To add a new machine with a new user to your NixOS or nix-darwin configuration, 
      newmachine = mkNixosConfiguration "newmachine" "newuser";
    };
    ```
-
-   For nix-darwin:
-
-   ```nix
-   darwinConfigurations = {
-     # Existing configurations...
-     newmachine = mkDarwinConfiguration "newmachine" "newuser";
-   };
-   ```
-
    c. Add the new home configuration:
 
    ```nix
@@ -123,18 +107,6 @@ To add a new machine with a new user to your NixOS or nix-darwin configuration, 
      ];
 
      networking.hostName = hostname;
-   }
-   ```
-
-   For nix-darwin:
-
-   ```nix
-   { darwinModules, ... }:
-   {
-     imports = [
-       "${darwinModules}/common"
-     ];
-     # Add machine-specific configurations here
    }
    ```
 
@@ -181,12 +153,6 @@ To add a new machine with a new user to your NixOS or nix-darwin configuration, 
    sudo nixos-rebuild switch --flake .#newmachine
    ```
 
-   For nix-darwin (requires Nix and nix-darwin installation first):
-
-   ```sh
-   darwin-rebuild switch --flake .#newmachine
-   ```
-
    c. Build and switch to the new Home Manager configuration:
 
 > [!IMPORTANT]
@@ -217,10 +183,6 @@ nix flake update
 - **`programs/steam`**: Steam gaming platform configuration.
 - **`services/tlp`**: TLP configuration for advanced power management on laptops.
 
-### Darwin Modules (in `modules/darwin/`)
-
-- **`common`**: Common macOS configurations including system defaults, keyboard remapping, and user settings.
-
 ### Home Manager Modules (in `modules/home-manager/`)
 
 - **`common`**: Common user-space configurations that import most other modules.
@@ -230,7 +192,6 @@ nix flake update
 - **`misc/qt`**: Qt theming using Kvantum and Catppuccin on Linux.
 - **`misc/wallpaper`**: Defines the default wallpaper path for desktops.
 - **`misc/xdg`**: Manages XDG user directories and default MIME type associations.
-- **`programs/aerospace` (Darwin):** Tiling window manager for macOS with custom keybindings and workspace rules.
 - **`programs/alacritty`:** GPU-accelerated terminal emulator, configured for tmux integration and platform-specific settings.
 - **`programs/albert` (Linux):** Application launcher and productivity tool.
 - **`programs/atuin`:** Enhanced shell history with cloud sync capabilities.

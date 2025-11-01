@@ -1,5 +1,5 @@
 {
-  description = "NixOS and nix-darwin configs for my machines";
+  description = "NixOS configs for my machines";
   inputs = {
     # Nixpkgs
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
@@ -26,19 +26,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.home-manager.follows = "home-manager";
     };
-
-    # Nix Darwin (for MacOS machines)
-    darwin = {
-      url = "github:LnL7/nix-darwin";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
   outputs =
     {
       self,
       catppuccin,
-      darwin,
       home-manager,
       nixpkgs,
       ...
@@ -48,21 +41,12 @@
 
       # Define user configurations
       users = {
-        "alexander.nabokikh" = {
-          inherit (users.nabokikh)
-            avatar
-            email
-            fullName
-            gitKey
-            ;
-          name = "alexander.nabokikh";
-        };
-        nabokikh = {
+        kevin = {
           avatar = ./files/avatar/face;
-          email = "alexander.nabokikh@olx.pl";
-          fullName = "Alexander Nabokikh";
-          gitKey = "C5810093";
-          name = "nabokikh";
+          email = "kevin@kevindoyon.com";
+          fullName = "Kevin Doyon";
+          gitKey = "ED3A9D45";
+          name = "kevin";
         };
       };
 
@@ -74,19 +58,6 @@
             inherit inputs outputs hostname;
             userConfig = users.${username};
             nixosModules = "${self}/modules/nixos";
-          };
-          modules = [ ./hosts/${hostname} ];
-        };
-
-      # Function for nix-darwin system configuration
-      mkDarwinConfiguration =
-        hostname: username:
-        darwin.lib.darwinSystem {
-          system = "aarch64-darwin";
-          specialArgs = {
-            inherit inputs outputs hostname;
-            userConfig = users.${username};
-            darwinModules = "${self}/modules/darwin";
           };
           modules = [ ./hosts/${hostname} ];
         };
@@ -109,18 +80,11 @@
     in
     {
       nixosConfigurations = {
-        energy = mkNixosConfiguration "energy" "nabokikh";
-      };
-
-      darwinConfigurations = {
-        "PL-OLX-KCGXHGK3PY" = mkDarwinConfiguration "PL-OLX-KCGXHGK3PY" "alexander.nabokikh";
+        kevin-pc = mkNixosConfiguration "kevin-pc" "kevin";
       };
 
       homeConfigurations = {
-        "alexander.nabokikh@PL-OLX-KCGXHGK3PY" =
-          mkHomeConfiguration "aarch64-darwin" "alexander.nabokikh"
-            "PL-OLX-KCGXHGK3PY";
-        "nabokikh@energy" = mkHomeConfiguration "x86_64-linux" "nabokikh" "energy";
+        "kevin@kevin-pc" = mkHomeConfiguration "x86_64-linux" "kevin" "kevin-pc";
       };
 
       overlays = import ./overlays { inherit inputs; };

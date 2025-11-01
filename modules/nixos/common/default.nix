@@ -48,8 +48,29 @@
       "rd.udev.log_level=3"
     ];
     loader.efi.canTouchEfiVariables = true;
-    loader.systemd-boot.enable = true;
-    loader.timeout = 0;
+    loader.systemd-boot.enable = false;
+    loader.grub = {
+      enable = true;
+      efiSupport = true;
+      devices = [ "nodev" ];
+      useOSProber = true;
+      extraEntries = ''
+  menuentry 'Kubuntu' --class kubuntu --class gnu-linux --class gnu --class os \$menuentry_id_option 'gnulinux-simple-9668003d-6dd9-4e34-909e-bceb82f6121d' {
+      recordfail
+      load_video
+      gfxmode \$linux_gfx_mode
+      insmod gzio
+      if [ x\$grub_platform = xxen ]; then insmod xzio; insmod lzopio; fi
+      insmod part_gpt
+      insmod btrfs
+      search --no-floppy --fs-uuid --set=root 9668003d-6dd9-4e34-909e-bceb82f6121d
+      linux /@/boot/vmlinuz-6.14.0-34-generic root=UUID=9668003d-6dd9-4e34-909e-bceb82f6121d ro rootflags=subvol=@ quiet splash resume=UUID=56c5722e-c765-4777-8103-32f6474bcdc6 pcie_port_pm=off pcie_aspm.policy=performance amdgpu.ppfeaturemask=0xffffffff \$vt_handoff
+      initrd /@/boot/initrd.img-6.14.0-34-generic
+  }
+'';
+
+    };
+    loader.timeout = 10;
     plymouth.enable = true;
 
     # v4l (virtual camera) module settings
@@ -70,20 +91,20 @@
   };
 
   # Timezone
-  time.timeZone = "Europe/Warsaw";
+  time.timeZone = "America/Toronto";
 
   # Internationalization
   i18n.defaultLocale = "en_US.UTF-8";
   i18n.extraLocaleSettings = {
-    LC_ADDRESS = "en_IE.UTF-8";
-    LC_IDENTIFICATION = "en_IE.UTF-8";
-    LC_MEASUREMENT = "en_IE.UTF-8";
-    LC_MONETARY = "en_IE.UTF-8";
-    LC_NAME = "en_IE.UTF-8";
-    LC_NUMERIC = "en_IE.UTF-8";
-    LC_PAPER = "en_IE.UTF-8";
-    LC_TELEPHONE = "en_IE.UTF-8";
-    LC_TIME = "en_IE.UTF-8";
+    LC_ADDRESS = "en_CA.UTF-8";
+    LC_IDENTIFICATION = "en_CA.UTF-8";
+    LC_MEASUREMENT = "en_CA.UTF-8";
+    LC_MONETARY = "en_CA.UTF-8";
+    LC_NAME = "en_CA.UTF-8";
+    LC_NUMERIC = "en_CA.UTF-8";
+    LC_PAPER = "en_CA.UTF-8";
+    LC_TELEPHONE = "en_CA.UTF-8";
+    LC_TIME = "en_CA.UTF-8";
   };
 
   # Enables support for Bluetooth
@@ -97,7 +118,7 @@
 
   # xserver settings
   services.xserver = {
-    xkb.layout = "pl";
+    xkb.layout = "en";
     xkb.variant = "";
     excludePackages = with pkgs; [ xterm ];
   };
@@ -137,6 +158,7 @@
   users.users.${userConfig.name} = {
     description = userConfig.fullName;
     extraGroups = [
+      "input"
       "networkmanager"
       "wheel"
     ];
@@ -167,6 +189,7 @@
     gcc
     glib
     gnumake
+    input-remapper
     killall
     mesa
   ];

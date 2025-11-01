@@ -31,7 +31,7 @@
     };
   };
 
-  services.gpg-agent = lib.mkIf (!pkgs.stdenv.isDarwin) {
+  services.gpg-agent = {
     enable = true;
     defaultCacheTtl = 86400;
     enableSshSupport = true;

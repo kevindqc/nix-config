@@ -6,7 +6,6 @@
 }:
 {
   imports = [
-    ../programs/aerospace
     ../programs/alacritty
     ../programs/albert
     ../programs/atuin
@@ -18,15 +17,16 @@
     ../programs/git
     ../programs/go
     ../programs/gpg
-    ../programs/k9s
-    ../programs/krew
+    #../programs/k9s
+    #../programs/krew
     ../programs/lazygit
     ../programs/neovim
     ../programs/obs-studio
-    ../programs/saml2aws
+    #../programs/saml2aws
     ../programs/starship
     ../programs/telegram
     ../programs/tmux
+    ../programs/vscode
     ../programs/zsh
     ../scripts
     ../services/flatpak
@@ -49,45 +49,31 @@
   # Home-Manager configuration for the user's home environment
   home = {
     username = "${userConfig.name}";
-    homeDirectory =
-      if pkgs.stdenv.isDarwin then "/Users/${userConfig.name}" else "/home/${userConfig.name}";
+    homeDirectory = "/home/${userConfig.name}";
   };
 
   # Ensure common packages are installed
-  home.packages =
-    with pkgs;
-    [
-      awscli2
-      dig
-      dust
-      eza
-      fd
-      jq
-      kubectl
-      nh
-      openconnect
-      pipenv
-      podman-compose
-      podman-tui
-      python3
-      ripgrep
-      terraform
-    ]
-    ++ lib.optionals stdenv.isDarwin [
-      anki-bin
-      colima
-      hidden-bar
-      mos
-      podman
-      raycast
-    ]
-    ++ lib.optionals (!stdenv.isDarwin) [
-      anki
-      tesseract
-      unzip
-      wl-clipboard
-    ];
-
+  home.packages = with pkgs; [
+    awscli2
+    dig
+    dust
+    eza
+    fd
+    jq
+    kubectl
+    nh
+    openconnect
+    pipenv
+    podman-compose
+    podman-tui
+    python3
+    ripgrep
+    terraform
+    anki
+    tesseract
+    unzip
+    wl-clipboard
+  ];
   # Catpuccin flavor and accent
   catppuccin = {
     flavor = "macchiato";

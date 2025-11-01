@@ -138,10 +138,10 @@
       keyboard = {
         layouts = [
           {
-            layout = "pl";
+            layout = "us";
           }
           {
-            layout = "ru";
+            layout = "fr";
           }
         ];
         repeatDelay = 250;
@@ -478,6 +478,22 @@
         match = {
           window-class = {
             value = "steam_app_";
+            type = "substring";
+            match-whole = false;
+          };
+        };
+      }
+      {
+        apply = {
+          desktops = "Desktop_5";
+          desktopsrule = "3";
+          fsplevel = "4";
+          fsplevelrule = "2";
+        };
+        description = "Assign Wow to Desktop 5";
+        match = {
+          window-class = { 
+            value = "wow.exe";
             type = "substring";
             match-whole = false;
           };

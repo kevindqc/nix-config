@@ -12,8 +12,10 @@
 
     ./hardware-configuration.nix
     "${nixosModules}/common"
-    "${nixosModules}/desktop/hyprland"
+    "${nixosModules}/desktop/kde"
     "${nixosModules}/programs/steam"
+    "${nixosModules}/programs/lutris"
+    "${nixosModules}/services/input-remapper"
   ];
 
   # Set hostname
